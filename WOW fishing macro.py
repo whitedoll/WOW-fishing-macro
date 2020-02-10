@@ -9,6 +9,8 @@ import pyautogui
 import time
 import mss
 import math
+import ctypes
+from ctypes import wintypes
 
 def callback2(hwnd):
     left, top, x2, y2 = win32gui.GetWindowRect(hwnd)
@@ -45,6 +47,11 @@ program_list = [WINDOW_NAME, WINDOW_NAME]
 
 frame = np.zeros((500, 550, 3), np.uint8)
 # frame = np.zeros(imgb.shape, np.uint8)
+
+BlockInput = ctypes.windll.user32.BlockInput
+BlockInput.argtypes = [wintypes.BOOL]
+BlockInput.restype = wintypes.BOOL
+
 cvui.init(WINDOW_NAME)
 with mss.mss() as sct:
 
@@ -183,8 +190,10 @@ with mss.mss() as sct:
                                 switch = 1
                     else:
                         if diff_position_y >= sensitivity[0]:
+                            BlockInput(True)
                             # if diff_position_y >= 3:
                             # print(contour[0][0][0])
+                            mouse_x, mouse_y = win32api.GetCursorPos()
                             if start == 1:
                                 pyautogui.moveTo(contour[0][0][0] + int(callback2(hwndMain)[0]) + 5,
                                                  contour[0][0][1] + int(callback2(hwndMain)[1]) + 15)
@@ -199,6 +208,7 @@ with mss.mss() as sct:
                             fail_detact = 0
                             success_num = success_num + 1
                             print("time_loop", success_num)
+                            BlockInput(False)
 
             # cvui.text(frame, 10, 15, 'Hello world!')
             if cvui.button(frame, 400, 300, "Start"):
