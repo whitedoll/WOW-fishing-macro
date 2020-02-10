@@ -202,7 +202,7 @@ with mss.mss() as sct:
                             switch = 0
                             time.sleep(1.5)
                             if start == 1:
-                                pyautogui.moveTo(int(callback2(hwndMain)[0]), int(callback2(hwndMain)[1]))
+                                pyautogui.moveTo(mouse_x, mouse_y)
                             fish_button = 0
                             time_loop = 0
                             fail_detact = 0
